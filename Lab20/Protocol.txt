@@ -1,0 +1,1299 @@
+
+1) Утилита grep
+
+1.1 ключ -c считает количество подходящих строк
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+howdy
+Hello, world!
+everyone
+howdy
+hi
+hi
+howdy 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -c "howdy" example.txt 
+3
+
+1.2 Ключ -v печатает на стандартный вывод все строки, не содержащие шаблон поиска
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+howdy
+Hello, world!
+everyone
+howdy
+hi
+hi
+howdy
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -v "hi" example.txt 
+howdy
+Hello, world!
+everyone
+howdy
+howdy
+
+1.3 Ключ -f, благодаря которому можно считывать шаблоны из файла, в котором они разделены переносом строки, 
+и искать их в другом файле
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+howdy
+Hello, world!
+everyone
+howdy
+hi
+hi
+howdy
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample.txt 
+hi
+hel
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt example.txt 
+hi
+hi
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample.txt 
+hi
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt example.txt 
+Hello, world!
+hi
+hi
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt example.txt|grep -c 'e'
+1
+
+1.4 Ключ -x, который заставляет утилиту выводить только те строки, которые полностью совпали
+с шаблоном
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+howdy
+Hello, world!
+everyone
+howdy
+hi
+hi
+howdy
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -x "hi" example.txt
+hi
+hi
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -x "Hello" example.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -x "Hello" example.txt|wc -c
+0
+
+1.5 Ключ -i, который закрывает глаза grep'а на регистр при поиске по шаблону
+Подходят и строчные, и заглавные 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+HoWdY
+Hello, world!
+everyone
+hOwDy
+hi
+hi
+howdy 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -i "howdy" example.txt 
+HoWdY
+hOwDy
+howdy 
+
+1.6 Ключ -l, который выводит имена файлов, которые подаются grep'у в качестве аргументов после
+шаблона. Выводятся имена лишь тех файлов, содержащих искомый шаблон или целую строку
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample1.txt 
+howdy
+how are you
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample2.txt 
+Hello
+hel 
+r
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample3.txt 
+HowDY
+
+howvadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -l "howdy" sample1.txt sample2.txt sample3.txt example.txt 
+sample1.txt
+example.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -l -i "howdy" sample1.txt sample2.txt sample3.txt example.txt 
+sample1.txt
+sample3.txt
+example.txt
+
+1.7 Ключ -w, который ищет в строках только введеное выражение целиком 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+HoWdY
+Hellozzz, world!
+everyone
+hOwDy
+hi
+hi
+howdy 
+hello 
+Hello, world
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -w "Hello" example.txt
+Hello, world
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -x "Hello" example.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -x "Hello" example.txt|wc -c
+0
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep "Hello" example.txt|wc -c
+30
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep "Hello" example.txt
+Hellozzz, world!
+Hello, world
+
+1.8 Ключ -q, который ничего не выводит на стандартный вывод
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -i -q "Hello" example.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -i -q "Hello" example.txt|wc -c
+0
+
+Парочка нетривиальных примеров: 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+howdy 
+Hello, world! abracadabra
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep '^abra' example.txt 
+abracadabra HoWdY abra
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep 'abra$' example.txt
+abracadabra HoWdY abra
+Hello, world! abracadabra
+
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample.txt 
+scar
+people
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample1.txt 
+howewer you see me
+just 
+tell 
+Is scaring people your habit?
+Do you make a habit of scaring the hell out of people
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample2.txt 
+No, more hobby
+scarf
+Hello
+hel 
+r
+is it right?
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sample3.txt 
+HowDY
+
+how
+
+Yes, of course
+people
+peoples 
+and so on
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt sample1.txt sample2.txt sample3.txt
+sample1.txt:Is scaring people your habit?
+sample1.txt:Do you make a habit of scaring the hell out of people
+sample2.txt:scarf
+sample3.txt:people
+sample3.txt:peoples 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt sample1.txt sample2.txt sample3.txt|grep -w people
+sample1.txt:Is scaring people your habit?
+sample1.txt:Do you make a habit of scaring the hell out of people
+sample3.txt:people
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt sample1.txt sample2.txt sample3.txt|grep -w people|grep -i i
+sample1.txt:Is scaring people your habit?
+sample1.txt:Do you make a habit of scaring the hell out of people
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ grep -f sample.txt sample1.txt sample2.txt sample3.txt|grep -w people|grep -i i|wc -c
+108
+
+
+
+2) Утилита sort
+
+2.1) Обычная и обратные сортировки по строкам 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat for_sort_sample.txt 
+login:x:uid:gid:name:home:shell
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+kpw:pqls:132:234:Bruce:BCave:ddkp
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+pmka:pqe:901:13:Edward:Riddles:ddkp
+bapwq:dfdf:15:10:James:GCPD:ddkp
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort for_sort_sample.txt 
+bapwq:dfdf:15:10:James:GCPD:ddkp
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+kpw:pqls:132:234:Bruce:BCave:ddkp
+login:x:uid:gid:name:home:shell
+pmka:pqe:901:13:Edward:Riddles:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -r for_sort_sample.txt 
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+pmka:pqe:901:13:Edward:Riddles:ddkp
+login:x:uid:gid:name:home:shell
+kpw:pqls:132:234:Bruce:BCave:ddkp
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+bapwq:dfdf:15:10:James:GCPD:ddkp
+
+2.2) Сортировка по столбцу или столбцам, с помощью -kn,m  где n и m - числа(n - начальный столбец, m - конечный столбец)
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat for_sort_sample.txt 
+login:x:uid:gid:name:home:shell
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+kpw:pqls:132:234:Bruce:BCave:ddkp
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+pmka:pqe:901:13:Edward:Riddles:ddkp
+bapwq:dfdf:15:10:James:GCPD:ddkp
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -t':' -k5,5 for_sort_sample.txt 
+kpw:pqls:132:234:Bruce:BCave:ddkp
+pmka:pqe:901:13:Edward:Riddles:ddkp
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+bapwq:dfdf:15:10:James:GCPD:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+login:x:uid:gid:name:home:shell
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+
+Сортировка по нескольким столбцам:
+
+
+2.3) Использование -n для сортировки по числам
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed 's/:/ /g' for_sort_sample.txt|sort -t' ' -k3,3 -n
+login x uid gid name home shell
+bapwq dfdf 15 10 James GCPD ddkp
+psfa ueovm 74 2 John odsfio ddkp
+bdhb ueovm 129 181 Eric Italia ddkp
+kpw pqls 132 234 Bruce BCave ddkp
+kpw duqm 221 7 Oswald Lounge ddkp
+wqqb yito 256 66 Falcone Brotherhood ddkp
+pmka pqe 901 13 Edward Riddles ddkp
+
+2.4) Использование -c для проверки, отсортирован файл или нет
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -t':' -nk4 for_sort_sample.txt|sort -c for_sort_sample.txt 
+sort: for_sort_sample.txt:2: неправильный порядок: bdhb:ueovm:129:181:Eric:Italia:ddkp
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort for_sort_sample.txt | sort -c for_sort_sample.txt 
+sort: for_sort_sample.txt:2: неправильный порядок: bdhb:ueovm:129:181:Eric:Italia:ddkp
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCDEF
+rra
+sldf
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print NR, $0}' alf.txt | grep 2 | sed 's/2/4/g' >> alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCDEF
+rra
+sldf
+4 rra
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort alf.txt 
+4 rra
+ABCDEF
+rra
+sldf
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt 
+sort: alf.txt:4: неправильный порядок: 4 rra
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt 
+sort: alf.txt:4: неправильный порядок: 4 rra
+
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCDEF
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "ABCTEF" >> alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCDEF
+ABCTEF
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "ABCTEF" > alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "ABCDEF" >> alf.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCTEF
+ABCDEF
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt 
+sort: alf.txt:2: неправильный порядок: ABCDEF
+
+2.5) Ключ -o, который позволяет записывать в файл, результат вывода sort
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+howdy 
+Hello, world! abracadabra
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sorted_ex.txt 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort example.txt -o sorted_ex.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat sorted_ex.txt 
+!abraabra!
+abracadabra HoWdY abra
+everyone
+Hello, world! abracadabra
+Hellozzz, world!
+howdy 
+hOwDy
+
+
+2.6) Ключ -u, который игнорирует повторяющиеся строки. То есть при сортировке их просто не выводит на поток вывода
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort example.txt 
+!abraabra!
+abracadabra HoWdY abra
+everyone
+Hello
+Hello
+Hello, world! abracadabra
+Hellozzz, world!
+hOwDy
+hOwDy
+hOwDy 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -u example.txt 
+!abraabra!
+abracadabra HoWdY abra
+everyone
+Hello
+Hello, world! abracadabra
+Hellozzz, world!
+hOwDy
+hOwDy 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort example.txt|wc -c
+118
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -u example.txt|wc -c
+106
+
+
+2.7) Ключ -m, которй объединяет отсортированные файлы  
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c Fsorted.txt|wc -c
+0
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -c alf.txt|wc -c
+0
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat alf.txt 
+ABCDEF
+ABCTEF
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat Fsorted.txt 
+abc
+ackl
+Gr
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort -m Fsorted.txt alf.txt 
+abc
+ABCDEF
+ABCTEF
+ackl
+Gr
+
+3) Утилита sed 
+
+3.1) Замена подстроки другой подстрокой 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed 's/hOwDy/Hi!/g' example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+Hi!
+!abraabra!
+Hi! 
+Hello, world! abracadabra
+Hi!
+Hello
+
+3.2) Удаление строки с помощью 'Nd', где N - номер строки
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print NR, $0}' example.txt
+1 Hello
+2 abracadabra HoWdY abra
+3 Hellozzz, world!
+4 everyone
+5 hOwDy
+6 !abraabra!
+7 hOwDy 
+8 Hello, world! abracadabra
+9 hOwDy
+10 Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print NR, $0}' example.txt|sed '9d'
+1 Hello
+2 abracadabra HoWdY abra
+3 Hellozzz, world!
+4 everyone
+5 hOwDy
+6 !abraabra!
+7 hOwDy 
+8 Hello, world! abracadabra
+10 Hello
+
+3.3) Добавление строки после указанной в формате 'NaSTRING', где N-номер строки, после которой будет добавлена STRING
+Также, если нужно вставить перед строкой, вместо a(append) будет i(insert)
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed '5aMY NEW STRING' example.txt|awk '{print NR, $0}'
+1 Hello
+2 abracadabra HoWdY abra
+3 Hellozzz, world!
+4 everyone
+5 hOwDy
+6 MY NEW STRING
+7 !abraabra!
+8 hOwDy 
+9 Hello, world! abracadabra
+10 hOwDy
+11 Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed '5iMY NEW STRING' example.txt|awk '{print NR, $0}'
+1 Hello
+2 abracadabra HoWdY abra
+3 Hellozzz, world!
+4 everyone
+5 MY NEW STRING
+6 hOwDy
+7 !abraabra!
+8 hOwDy 
+9 Hello, world! abracadabra
+10 hOwDy
+11 Hello
+
+3.4) Ситуация, когда нам необходимо после строки, которую мы ищем по шаблону, что-то написать:
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed '/hO*/aCOWBOY' example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+COWBOY
+!abraabra!
+hOwDy 
+COWBOY
+Hello, world! abracadabra
+hOwDy
+COWBOY
+Hello
+
+
+4) Утилита awk
+
+?.1 Вывод всего содержимого файла на стандартный поток вывода
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat people.txt 
+firstname   lastname    age    city    ID
+  Thomas     Edison     45     London   1
+  Andrew     Garfield   31     Queens   2
+  Jack       Sparrow    38     Tortuga  3
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print $0}' people.txt 
+firstname   lastname    age    city    ID
+  Thomas     Edison     45     London   1
+  Andrew     Garfield   31     Queens   2
+  Jack       Sparrow    38     Tortuga  3
+  
+
+4.2 Нумерация строк:
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print NR, $0}' people.txt 
+1 firstname   lastname    age    city    ID
+2   Thomas     Edison     45     London   1
+3   Andrew     Garfield   31     Queens   2
+4   Jack       Sparrow    38     Tortuga  3
+5  
+
+4.3 Вывод конкретного столбца 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print $1}' people.txt 
+firstname
+Thomas
+Andrew
+Jack
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk '{print $2}' people.txt 
+lastname
+Edison
+Garfield
+Sparrow
+
+4.4 Хотим вывести второй столбец, если ... (например, первый столбец содержит имя Thomas)
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat people.txt 
+firstname   lastname    age    city    ID
+  Thomas     Edison     45     London   1
+  Andrew     Garfield   31     Queens   2
+  Jack       Sparrow    38     Tortuga  3
+  vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed '4i  Thomas    Munz' people.txt | awk '$1 ~ /Thomas/  {print $2}'
+Edison
+Munz
+  vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sed '4i  Thomas    Munz' people.txt | awk '$1 ~ /Tho/  {print $2}'
+Edison
+Munz
+
+4.5 Хотим просуммировать значения в каком-нибудь столбце 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat people.txt 
+firstname   lastname    age    city    ID
+  Thomas     Edison     45     London   1
+  Andrew     Garfield   31     Queens   2
+  Jack       Sparrow    38     Tortuga  3
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk 'BEGIN {s=0} {s=s+$3}  {print s}' people.txt 
+0
+45
+76
+114
+114
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk 'BEGIN {s=0} {s=s+$3} END {print s}' people.txt 
+114
+
+4.6 Хотим посчитать количество людей, у которых имя начинается на R, 
+в возрасте от n до m лет и вывести их фамилии, а в конце вывести их количество
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat people.txt 
+firstname   lastname    age    city    ID
+  Thomas     Edison     90     London   1
+  Rico      Cobblepot   115     USA     2
+  Jack       Sparrow    38     Tortuga  3
+  Ricardo    Milos      45     Brazil   4
+  Alfred   Pennyworth   64     England  5
+  Selina      Kyle      23      USA     6
+  Roman      Tivodar    35     Russia   7
+  Andrew     Garfield   31     Queens   8
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ $ awk -v n=34 -v m=65{if ($3 > n && $3 < m) {if ($1~"R") print $2}}' people.txt
+Milos
+Tivodar
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ awk -v n=34 -v m=65 '{if ($3 > n && $3 < m) {if ($1~"R") print $2}}' people.txt|awk 'BEGIN {s=0} {++s} {print $1} END {print s}' 
+Milos
+Tivodar
+2
+
+4.7 Выведем все простые числа от 1 до 100
+
+
+
+
+5. Команда find
+
+5.1 Ключ -type на поиск различных типов обьектов 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ ls
+exFile14.txt  exFile1.txt  exFile3.txt  exFile5.txt  exFile7.txt          new_direct_for_find2
+exFile15.txt  exFile2.txt  exFile4.txt  exFile6.txt  new_direct_for_find
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find -type f
+./exFile14.txt
+./exFile7.txt
+./exFile2.txt
+./exFile15.txt
+./exFile3.txt
+./exFile4.txt
+./exFile1.txt
+./exFile5.txt
+./exFile6.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find -type d
+.
+./new_direct_for_find2
+./new_direct_for_find
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find -type l
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ 
+
+Также поиск в любой другой директории:
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find ../ -type d
+../
+../new_dir
+../new_dir/mc_catalog
+../new_dir/mc_catalog/mc_catalog1
+../samples
+../for_find
+../for_find/new_direct_for_find2
+../for_find/new_direct_for_find
+../mc_screens
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ ls ..
+alf.txt  example.txt  for_find  for_sort_sample.txt  Fsorted.txt  mc_screens  new_dir  people.txt  Protocol.txt  samples  sorted_ex.txt  wc
+
+5.2 Поиск по имени с использованием -name
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ ls
+exFile14.txt  exFile1.txt  exFile3.txt  exFile5.txt  exFile7.txt          new_direct_for_find2
+exFile15.txt  exFile2.txt  exFile4.txt  exFile6.txt  new_direct_for_find
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find -name "example"
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find -name "exFile7.txt"
+./exFile7.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ find ../ -name "new_direct_for_find"
+../for_find/new_direct_for_find
+
+5.3 Поиск по размеру: +5k(больше 5 Кб) -5k(меньше 5 Кб). Ключ -size
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ ll
+итого 28
+drwxrwxr-x 4 vadim vadim 4096 мар  3 18:04 ./
+drwxrwxr-x 6 vadim vadim 4096 мар  3 18:01 ../
+-rw-rw-r-- 1 vadim vadim  659 мар  3 18:24 exFile14.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile15.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile1.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile2.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile3.txt
+-rw-rw-r-- 1 vadim vadim 7249 мар  3 18:25 exFile4.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile5.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile6.txt
+-rw-rw-r-- 1 vadim vadim    0 мар  3 18:03 exFile7.txt
+drwxrwxr-x 2 vadim vadim 4096 мар  3 18:04 new_direct_for_find/
+drwxrwxr-x 2 vadim vadim 4096 мар  3 18:04 new_direct_for_find2/
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20/for_find$ cd ..
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ find for_find/ -name "ex*" -size -5k
+for_find/exFile14.txt
+for_find/exFile7.txt
+for_find/exFile2.txt
+for_find/exFile15.txt
+for_find/exFile3.txt
+for_find/exFile1.txt
+for_find/exFile5.txt
+for_find/exFile6.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ find for_find/ -name "ex*" -size +5k
+for_find/exFile4.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ find for_find/ -type f -name "*.txt" -size +5k
+for_find/exFile4.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ find for_find/ -type d -name "*.txt" -size +5k
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ 
+
+
+6. Команда split
+Разбивает файлы горизонтально, по умолчанию - по 1000 строк
+
+6.1 Без ключей 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ wc -l for_splitting.txt 
+6708 for_splitting.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls
+alf.txt      for_find             for_splitting.txt  mc_screens  people.txt    samples        wc
+example.txt  for_sort_sample.txt  Fsorted.txt        new_dir     Protocol.txt  sorted_ex.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ split for_splitting.txt --verbose 
+создаётся файл 'xaa'
+создаётся файл 'xab'
+создаётся файл 'xac'
+создаётся файл 'xad'
+создаётся файл 'xae'
+создаётся файл 'xaf'
+создаётся файл 'xag'
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls
+alf.txt      for_find             for_splitting.txt  mc_screens  people.txt    samples        wc   xab  xad  xaf
+example.txt  for_sort_sample.txt  Fsorted.txt        new_dir     Protocol.txt  sorted_ex.txt  xaa  xac  xae  xag
+
+6.2 Указываем количество строк для разбиения:
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls
+alf.txt      for_find             for_splitting.txt  mc_screens  people.txt    samples        wc
+example.txt  for_sort_sample.txt  Fsorted.txt        new_dir     Protocol.txt  sorted_ex.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ split for_splitting.txt -l 500 --verbose 
+создаётся файл 'xaa'
+создаётся файл 'xab'
+создаётся файл 'xac'
+создаётся файл 'xad'
+создаётся файл 'xae'
+создаётся файл 'xaf'
+создаётся файл 'xag'
+создаётся файл 'xah'
+создаётся файл 'xai'
+создаётся файл 'xaj'
+создаётся файл 'xak'
+создаётся файл 'xal'
+создаётся файл 'xam'
+создаётся файл 'xan'
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ la
+alf.txt      for_find             for_splitting.txt  mc_screens  people.txt    samples        wc   xab  xad  xaf  xah  xaj  xal  xan
+example.txt  for_sort_sample.txt  Fsorted.txt        new_dir     Protocol.txt  sorted_ex.txt  xaa  xac  xae  xag  xai  xak  xam
+
+
+
+7. Команда cut 
+Разбивает файл вертикально на столбцы
+
+7.1 Ключ -b для вывода текущего байта в последовательности текста 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "Hello, world!"|cut -b 1
+H
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "Аello, world!"|cut -b 1
+�
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "Hello, world!"|cut -b 5
+o
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "Hello, world!"|cut -b 8
+w
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "Hello, world!"|cut -b 5-10
+o, wor
+
+7.2 Ключ -cN, который позволяет вывести N-тый символ в каждой строке 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat xai|head -10
+777
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ plus=+
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ num2=223
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ echo $num1 $plus $num2
+777 + 223
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ echo $num1 $plus $num2|bc
+1000
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ echo $num1 $plus $num2|bc >> SOMEfile.txt
+vadim@vadim-GF65-Thin-9SEXR:~/ex$ cat SOMEfile.txt 
+1000
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cut -c1 <(cat xai|head -10)
+7
+v
+v
+v
+7
+v
+1
+v
+v
+1
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cut -d"-" -f4 <(cat xai|head -10)
+777
+9SEXR:~/ex$ plus=+
+9SEXR:~/ex$ num2=223
+9SEXR:~/ex$ echo $num1 $plus $num2
+777 + 223
+9SEXR:~/ex$ echo $num1 $plus $num2|bc
+1000
+9SEXR:~/ex$ echo $num1 $plus $num2|bc >> SOMEfile.txt
+9SEXR:~/ex$ cat SOMEfile.txt 
+1000
+
+
+8. Команда join 
+Перебирает все строки файлов и склеивает их поля в зависимости от разделителей
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat <(head -10 xai|sed 's/-/%/g'|sed 's/@/%/g') <(cat xai|head -10|tail -5|sed 's/-/%/g'|sed 's/@/%/g')
+777
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ plus=+
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ num2=223
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ echo $num1 $plus $num2
+777 + 223
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ echo $num1 $plus $num2|bc
+1000
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ echo $num1 $plus $num2|bc >> SOMEfile.txt
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ cat SOMEfile.txt 
+1000
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ echo $num1 $plus $num2|bc
+1000
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ echo $num1 $plus $num2|bc >> SOMEfile.txt
+vadim%vadim%GF65%Thin%9SEXR:~/ex$ cat SOMEfile.txt 
+1000
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ join -t"%" -1 4 -2 4 <(head -10 xai|sed 's/-/%/g'|sed 's/@/%/g') <(cat xai|head -10|tail -5|sed 's/-/%/g'|sed 's/@/%/g')
+join: /dev/fd/63:5: без сортировки: 777 + 223
+join: /dev/fd/62:2: без сортировки: 1000
+Thin%vadim%vadim%GF65%9SEXR:~/ex$ plus=+%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc
+Thin%vadim%vadim%GF65%9SEXR:~/ex$ num2=223%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc
+Thin%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc
+%777 + 223%1000
+Thin%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc >> SOMEfile.txt
+Thin%vadim%vadim%GF65%9SEXR:~/ex$ echo $num1 $plus $num2|bc%vadim%vadim%GF65%9SEXR:~/ex$ cat SOMEfile.txt 
+%1000%1000
+join: входные данные не отсортированы
+
+
+9. Команда paste
+Объединяет файлы построчно 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ tail -5 example.txt
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ paste <(tail -5 example.txt) <(head -4 example.txt)
+!abraabra!	Hello
+hOwDy 	abracadabra HoWdY abra
+Hello, world! abracadabra	Hellozzz, world!
+hOwDy	everyone
+Hello
+
+
+10. Команда xargs 
+Может передавать всё то, что получила на вход, в качестве параметров для других команд
+
+10.1 Default
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls
+alf.txt      for_find             for_splitting.txt  mc_screens  people.txt    samples        wc
+example.txt  for_sort_sample.txt  Fsorted.txt        new_dir     Protocol.txt  sorted_ex.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls|xargs 
+alf.txt example.txt for_find for_sort_sample.txt for_splitting.txt Fsorted.txt mc_screens new_dir people.txt Protocol.txt samples sorted_ex.txt wc
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls -la|xargs 
+итого 368 drwxrwxr-x 6 vadim vadim 4096 мар 5 12:15 . drwxrwxr-x 4 //перенос строки
+vadim vadim 4096 фев 21 15:39 .. -rw-rw-r-- 1 vadim vadim 14 фев 24 17:54 alf.txt //перенос строки
+-rw-rw-r-- 1 vadim vadim 117 фев 24 18:43 example.txt drwxrwxr-x 4 vadim vadim 4096 //перенос строки
+мар 3 18:04 for_find -rw-rw-r-- 1 vadim vadim 280 фев 24 12:22 for_sort_sample.txt //перенос строки
+-rw-rw-r-- 1 vadim vadim 294632 мар 3 18:46 for_splitting.txt -rw-rw-r-- 1 vadim //перенос строки
+vadim 12 фев 24 17:56 Fsorted.txt drwxrwxr-x 2 vadim vadim 4096 фев 24 12:08 //перенос строки
+mc_screens drwxrwxr-x 3 vadim vadim 4096 фев 24 11:48 new_dir -rw-rw-r-- 1 vadim //перенос строки
+vadim 380 фев 24 20:18 people.txt -rw-rw-r-- 1 vadim vadim 29939 мар 5 12:29 Protocol.txt //перенос строки
+drwxrwxr-x 2 vadim vadim 4096 фев 24 12:14 samples -rw-rw-r-- 1 vadim vadim 99 фев 24 //перенос строки
+17:43 sorted_ex.txt -rw-rw-r-- 1 vadim vadim 0 фев 24 18:49 wc
+
+10.2 Ключ -n, вызывает утилиту, используя как можно больше стандартных входных
+аргументов, максимум до n в одной строке
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls|xargs -n "1"
+alf.txt
+example.txt
+for_find
+for_sort_sample.txt
+for_splitting.txt
+Fsorted.txt
+mc_screens
+new_dir
+people.txt
+Protocol.txt
+samples
+sorted_ex.txt
+wc
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls|xargs -n 4
+alf.txt example.txt for_find for_sort_sample.txt
+for_splitting.txt Fsorted.txt mc_screens new_dir
+people.txt Protocol.txt samples sorted_ex.txt
+wc
+
+
+11. Команда df
+
+Утилита df отображает объем дискового пространства, занимаемого смонтированными 
+в данный момент файловыми системами, объем используемого и доступного пространства, а также то, 
+какая часть общей емкости файловой системы была использована.
+
+11.1 Default + '-h'
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ df
+Файл.система   1K-блоков Использовано Доступно Использовано% Cмонтировано в
+tmpfs             797920         1828   796092            1% /run
+/dev/nvme0n1p5  17125740     15372536   857924           95% /
+tmpfs            3989600        19900  3969700            1% /dev/shm
+tmpfs               5120            4     5116            1% /run/lock
+/dev/nvme0n1p2     98304        11684    86620           12% /boot/efi
+tmpfs             797920          140   797780            1% /run/user/1000
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ df -h
+Файл.система   Размер Использовано  Дост Использовано% Cмонтировано в
+tmpfs            780M         1,8M  778M            1% /run
+/dev/nvme0n1p5    17G          15G  842M           95% /
+tmpfs            3,9G          17M  3,8G            1% /dev/shm
+tmpfs            5,0M         4,0K  5,0M            1% /run/lock
+/dev/nvme0n1p2    96M          12M   85M           12% /boot/efi
+tmpfs            780M         140K  780M            1% /run/user/1000
+
+
+11.2 Ключ -a также выводит распределение дискового пространства и вместе с ним - фиктивные файлы
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ df -a
+df: /run/user/1000/doc: Операция не позволена
+Файл.система   1K-блоков Использовано Доступно Использовано% Cмонтировано в
+sysfs                  0            0        0             - /sys
+proc                   0            0        0             - /proc
+udev             3913424            0  3913424            0% /dev
+devpts                 0            0        0             - /dev/pts
+tmpfs             797920         1828   796092            1% /run
+/dev/nvme0n1p5  17125740     15371052   859408           95% /
+securityfs             0            0        0             - /sys/kernel/security
+tmpfs            3989600        16828  3972772            1% /dev/shm
+tmpfs               5120            4     5116            1% /run/lock
+cgroup2                0            0        0             - /sys/fs/cgroup
+pstore                 0            0        0             - /sys/fs/pstore
+efivarfs               0            0        0             - /sys/firmware/efi/efivars
+bpf                    0            0        0             - /sys/fs/bpf
+systemd-1              0            0        0             - /proc/sys/fs/binfmt_misc
+hugetlbfs              0            0        0             - /dev/hugepages
+mqueue                 0            0        0             - /dev/mqueue
+debugfs                0            0        0             - /sys/kernel/debug
+tracefs                0            0        0             - /sys/kernel/tracing
+fusectl                0            0        0             - /sys/fs/fuse/connections
+configfs               0            0        0             - /sys/kernel/config
+none                   0            0        0             - /run/credentials/systemd-sysusers.service
+/dev/nvme0n1p2     98304        11684    86620           12% /boot/efi
+tmpfs             797920          140   797780            1% /run/user/1000
+gvfsd-fuse             0            0        0             - /run/user/1000/gvfs
+
+
+12-13. Утилиты diff и patch
+
+1) Просто diff
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat original_file.txt 
+The begining of original file
+The 2-nd begining of original file
+The 3-rd begining of original file
+The 4-th begining of original file
+The 5-th begining of original file
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat original_file.txt > updated_file.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat updated_file.txt 
+The begining of original file
+The 2-nd begining of original file
+The 3-rd begining of original file
+The 4-th begining of original file
+The 5-th begining of original file
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat updated_file.txt 
+The begining of original file
+some sTrInG 3
+The 2-nd begining of original file
+The 3-rd begining of original file
+some sTrInG 1
+The 4-th begining of original file
+The 5-th begining of original file
+some sTrInG 2
+some sTrInG 4
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ diff original_file.txt updated_file.txt 
+1a2
+> some sTrInG 3
+3a5
+> some sTrInG 1
+5a8,9
+> some sTrInG 2
+> some sTrInG 4
+
+
+2) diff + patch 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ diff original_file.txt updated_file.txt > pFile.patch
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat pFile.patch 
+1a2
+> some sTrInG 3
+3a5
+> some sTrInG 1
+5a8,9
+> some sTrInG 2
+> some sTrInG 4
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat original_file.txt 
+The begining of original file
+The 2-nd begining of original file
+The 3-rd begining of original file
+The 4-th begining of original file
+The 5-th begining of original file
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ patch original_file.txt -i pFile.patch -o updated_file.1.txt
+patching file updated_file.1.txt (read from original_file.txt)
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat updated_file.1.txt 
+The begining of original file
+some sTrInG 3
+The 2-nd begining of original file
+The 3-rd begining of original file
+some sTrInG 1
+The 4-th begining of original file
+The 5-th begining of original file
+some sTrInG 2
+some sTrInG 4
+
+
+14. Утилита uniq
+
+Нужна для нахождения уникальных строк файла.
+Если файл не отсортирован, утилита будет работать некорректно
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat for_uniq.txt 
+right new_direct_for_find
+right now 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+sunt explicabo. 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ uniq -c for_uniq.txt 
+      1 right new_direct_for_find
+      1 right now 
+      1 Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+      1 quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+      1 sunt explicabo. 
+      1 Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+      1 Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+      1 vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+      1 Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+
+14.1 Default
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat for_uniq.txt 
+right new_direct_for_find
+right now 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+sunt explicabo. 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ uniq for_uniq.txt 
+right new_direct_for_find
+right now 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+sunt explicabo. 
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+
+14.2 Ключ -c выводит уникальные строки, а слева от них - то, сколько раз они встречаются в файле
+
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ uniq -c for_uniq.txt 
+      1 right new_direct_for_find
+      1 right now 
+      2 Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+      1 quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+      1 sunt explicabo. 
+      4 Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+      1 vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+
+
+14.3 Ключ -i будет игнорировать регистр при сравнении 
+
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat for_uniq.txt 
+right new_direct_for_find
+right now 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+sunt explicabo. 
+Nemo enim ipsam Voluptatem quia voluptas sit aspernatur 
+nemo Enim ipsam voluptatem quia voluptas sit aspernatur 
+Nemo enim Ipsam voluptatem quia voluptas sit Aspernatur 
+nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ uniq -i -c for_uniq.txt 
+      1 right new_direct_for_find
+      1 right now 
+      2 Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+      1 quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+      1 sunt explicabo. 
+      4 Nemo enim ipsam Voluptatem quia voluptas sit aspernatur 
+      1 aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+      1 vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ uniq -c for_uniq.txt 
+      1 right new_direct_for_find
+      1 right now 
+      2 Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+      1 quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+      1 sunt explicabo. 
+      1 Nemo enim ipsam Voluptatem quia voluptas sit aspernatur 
+      1 nemo Enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 Nemo enim Ipsam voluptatem quia voluptas sit Aspernatur 
+      1 nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+      1 aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+      1 vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+
+15. Утилита cmp
+Сравнивает два файла 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cmp example.txt for_uniq.txt 
+example.txt for_uniq.txt различаются: байт 1, строка 1
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cmp example.txt example.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cmp <(sort example.txt) example.txt 
+/dev/fd/63 example.txt различаются: байт 1, строка 1
+
+
+
+16. Утилита comm 
+
+Выделяет строки, общие для двух файлов 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ comm <(sort example.txt) <(sort for_uniq.txt)
+!abraabra!
+abracadabra HoWdY abra
+	aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione 
+everyone
+Hello
+Hello
+Hello, world! abracadabra
+Hellozzz, world!
+hOwDy
+hOwDy
+hOwDy 
+	Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+	Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+	Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+	Nemo enim ipsam voluptatem quia voluptas sit aspernatur 
+	quae ab illo inventore veritatis et quasi architecto beatae vitae dicta 
+	right new_direct_for_find
+	right now 
+	Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+	Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+	sunt explicabo. 
+	vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ comm <(sort example.txt) <(sort example.txt)
+		!abraabra!
+		abracadabra HoWdY abra
+		everyone
+		Hello
+		Hello
+		Hello, world! abracadabra
+		Hellozzz, world!
+		hOwDy
+		hOwDy
+		hOwDy 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ touch example2.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt > example2.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo EOF >> example2.txt 
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ comm <(sort example.txt) <(sort example2.txt)
+		!abraabra!
+		abracadabra HoWdY abra
+	EOF
+		everyone
+		Hello
+		Hello
+		Hello, world! abracadabra
+		Hellozzz, world!
+		hOwDy
+		hOwDy
+		hOwDy 
+
+
+17. Утилита tee 
+
+Дублирует всё, что получила на вход в несколько файликов
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls
+alf.txt       example.txt  for_sort_sample.txt  for_uniq.txt  mc_screens  original_file.txt  pFile.patch   samples        updated_file.1.txt  wc
+example2.txt  for_find     for_splitting.txt    Fsorted.txt   new_dir     people.txt         Protocol.txt  sorted_ex.txt  updated_file.txt
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ ls -la|tee >(grep '^d' > a) >(head -4 > b) >/dev/null
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat a
+drwxrwxr-x 6 vadim vadim   4096 мар  5 16:00 .
+drwxrwxr-x 4 vadim vadim   4096 фев 21 15:39 ..
+drwxrwxr-x 4 vadim vadim   4096 мар  3 18:04 for_find
+drwxrwxr-x 2 vadim vadim   4096 фев 24 12:08 mc_screens
+drwxrwxr-x 3 vadim vadim   4096 фев 24 11:48 new_dir
+drwxrwxr-x 2 vadim vadim   4096 фев 24 12:14 samples
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat b
+итого 408
+drwxrwxr-x 6 vadim vadim   4096 мар  5 16:00 .
+drwxrwxr-x 4 vadim vadim   4096 фев 21 15:39 ..
+-rw-rw-r-- 1 vadim vadim      0 мар  5 16:00 a
+
+
+18. Утилита wc 
+
+Считает слова ¯\_(ツ)_/¯
+
+18.1 Конкретно здесь мы посчитали длину самой длинной строки
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ cat example.txt 
+Hello
+abracadabra HoWdY abra
+Hellozzz, world!
+everyone
+hOwDy
+!abraabra!
+hOwDy 
+Hello, world! abracadabra
+hOwDy
+Hello
+This is the largest line in this file, I suppose so...
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ wc -L <(sort example.txt|grep "a")
+54 /dev/fd/63
+
+
+18.2 Теперь посчитаем количество строк, а выведем его без названия временного файла
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort example.txt|grep "a"|grep "o"
+abracadabra HoWdY abra
+Hello, world! abracadabra
+This is the largest line in this file, I suppose so...
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ sort example.txt|grep "a"|grep "o"
+abracadabra HoWdY abra
+Hello, world! abracadabra
+This is the largest line in this file, I suppose so...
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ wc -l <(sort example.txt|grep "a"|grep "o")
+3 /dev/fd/63
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ wc -l <(sort example.txt|grep "a"|grep "o")|awk '{print $1}'
+3
+
+18.3 Вывод количества байтов и слов входного потока
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "one two three four five six seven eight and so on"|wc -c
+50
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ man wc
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ echo "one two three four five six seven eight and so on"|wc -w
+11
+
+sample: 
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ wc --lines <(wc -c Protocol.txt|awk '{print $2}'|xargs)
+1 /dev/fd/63
+
+
+19. Утилита mktemp 
+Создает временный файл с уникальным именем 
+
+19.1 Можно указать свое название с буквой 'X' в верхнем регистре. Тогда временный файл будет создан таким образом
+
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ mktemp
+/tmp/tmp.IRUVkf4652
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ mktemp my_tempXXXX
+my_temp4Q6S
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ mktemp -u //Пробный запуск, в этом случае не создаем
+/tmp/tmp.uCudfw1yp8
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ mktemp -d
+/tmp/tmp.JDVmY42xHo
+vadim@vadim-GF65-Thin-9SEXR:~/2 семестр/Labors/Lab20$ mktemp -d my_tempdirXXXX --suffix=SuF
+my_tempdirlts5SuF
+
+
+
+
+
+
+

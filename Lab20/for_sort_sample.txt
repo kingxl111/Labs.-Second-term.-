@@ -1,0 +1,8 @@
+login:x:uid:gid:name:home:shell
+bdhb:ueovm:129:181:Eric:Italia:ddkp
+psfa:ueovm:74:2:John:odsfio:ddkp
+kpw:duqm:221:7:Oswald:Lounge:ddkp
+kpw:pqls:132:234:Bruce:BCave:ddkp
+wqqb:yito:256:66:Falcone:Brotherhood:ddkp
+pmka:pqe:901:13:Edward:Riddles:ddkp
+bapwq:dfdf:15:10:James:GCPD:ddkp
