@@ -5,13 +5,15 @@
 #include "lexeme_stack.h"
 #include "lexeme_tree.h"
 #include "stack_of_lexeme_trees.h"
+// #include "lexeme_generic_tree.h"
+
 
 LEX_READ_RESULT read_lex(LEXTYPE prev_type, lexeme *out);
 EXPR_READ_RESULT read_expr(lex_queue *out);
 // lex_queue postfix_to_infix(lex_queue *in);
 bool Dijkstra_sort_station(lex_queue *in, lex_queue *out);
 lex_tree postfix_to_tree(lex_queue *q);
-void from_bin_to_n_tree(lex_tree tree);
+// lex_generic_tree from_bin_to_n_tree(lex_tree tree);
 
 
 int main()
@@ -31,10 +33,11 @@ int main()
     if(Dijkstra_sort_station(&in, &output))
     {
         printf("ВЫРАЖЕНИЕ СОСТАВЛЕНО ВЕРНО!\n");
-        // lex_queue_print(&output);
+        lex_queue_print(&output);
         lex_tree expr_tree = postfix_to_tree(&output);
         lex_tree_print(expr_tree, 1);
-        from_bin_to_n_tree(expr_tree); // 
+        // lex_generic_tree gen_tree = from_bin_to_n_tree(expr_tree); // 
+        // lex_generic_tree_print_tab(gen_tree);
     }
     else 
     {
@@ -176,8 +179,8 @@ bool Dijkstra_sort_station(lex_queue *in, lex_queue *out)
                 if(lex_stack_pop(&operators, &op2)) //feature
                 {
                     while(!lex_stack_is_empty(&operators) 
-                    && ((cur_lex.oper_priority <= op2.oper_priority && cur_lex.oper_assoc == left)
-                    || (cur_lex.oper_assoc == right && cur_lex.oper_priority < op2.oper_priority)))
+                    && (((cur_lex.oper_priority <= op2.oper_priority) && (cur_lex.oper_assoc == left))
+                    || ((cur_lex.oper_assoc == right) && (cur_lex.oper_priority < op2.oper_priority))))
                     {
                         if(op2.type == LEX_BR_L)
                         {
@@ -286,9 +289,32 @@ lex_tree postfix_to_tree(lex_queue *q)
     }
 }
 
+/*
+void generic_tree_building(lex_tree tree, lex_generic_tree *result)
+{
+    if(tree == NULL)
+    {
+        return;
+    }
+    if(tree->left != NULL)
+    {
+        lex_generic_tree_add(&result, tree->left->val, "c");
+    }
+    if(tree->right != NULL)
+    {
+        lex_generic_tree_add(&result, tree->right->val, "b");
+    }
+}
 
-void from_bin_to_n_tree(lex_tree tree)
+lex_generic_tree from_bin_to_n_tree(lex_tree tree)
 {
     //TODO: написать функцию конвертирования бинарного дерева в n-мерное! 
-    return;
+
+    lex_generic_tree result_tree;
+    lexeme root = tree->val;
+    lex_generic_tree_create(&result_tree, root);
+    generic_tree_building(tree, &result_tree);
+    return result_tree;
+
 }
+*/
