@@ -18,6 +18,7 @@ LEX_READ_RESULT read_lex(LEXTYPE prev_type, lexeme *out);
 EXPR_READ_RESULT read_expr(lex_queue *out);
 bool Dijkstra_sort_station(lex_queue *in, lex_queue *out);
 lex_tree postfix_to_tree(lex_queue *q);
+//Задание: убрать из выражения все сомножители, равные единице
 void my_task(lex_tree prev_node, direction d, lex_tree cur_node);
 
 int main()
