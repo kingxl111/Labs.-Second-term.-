@@ -5,21 +5,27 @@
 #include "lexeme_stack.h"
 #include "lexeme_tree.h"
 #include "stack_of_lexeme_trees.h"
-// #include "lexeme_generic_tree.h"
 
+
+typedef enum 
+{
+    none,
+    left_d,
+    right_d
+} direction;
 
 LEX_READ_RESULT read_lex(LEXTYPE prev_type, lexeme *out);
 EXPR_READ_RESULT read_expr(lex_queue *out);
-// lex_queue postfix_to_infix(lex_queue *in);
 bool Dijkstra_sort_station(lex_queue *in, lex_queue *out);
 lex_tree postfix_to_tree(lex_queue *q);
-// lex_generic_tree from_bin_to_n_tree(lex_tree tree);
-
+void my_task(lex_tree prev_node, direction d, lex_tree cur_node);
 
 int main()
 {
     lex_queue in;
     lex_queue_init(&in);
+
+    printf("Введите выражение: \n");
     read_expr(&in);
 
     lex_queue output;
@@ -32,10 +38,15 @@ int main()
 
     if(Dijkstra_sort_station(&in, &output))
     {
-        printf("ВЫРАЖЕНИЕ СОСТАВЛЕНО ВЕРНО!\n");
+        printf("ВЫРАЖЕНИЕ СОСТАВЛЕНО ВЕРНО!\nПостфиксная запись:\n");
         lex_queue_print(&output);
+        printf("Дерево выражения:\n");
         lex_tree expr_tree = postfix_to_tree(&output);
         lex_tree_print(expr_tree, 1);
+        printf("----------------------------------------------------------\nИндивидуальное задание: \n");
+        my_task(expr_tree, none, expr_tree);
+        lex_tree_print(expr_tree, 1);
+
         // lex_generic_tree gen_tree = from_bin_to_n_tree(expr_tree); // 
         // lex_generic_tree_print_tab(gen_tree);
     }
@@ -290,4 +301,57 @@ lex_tree postfix_to_tree(lex_queue *q)
     {
         return lex_tree_empty();
     }
+}
+
+void my_task(lex_tree prev_node, direction prev_node_d, lex_tree cur_node)
+{
+    if(cur_node == NULL)
+    {
+        return;
+    }
+    if(cur_node != prev_node)
+    {
+        if(cur_node->val.oper == '*')
+        {
+            // printf("Ok!!\n");
+            lex_tree next_node = NULL;
+            direction cur_node_d = none;
+            if((cur_node->left != NULL) && ((cur_node->left->val.cnst == 1) && (cur_node->left->val.type == LEX_CONST)))
+            {
+                next_node = cur_node->right; //Узел, который нужно присоединить к родителю текущего узла
+                cur_node_d = right_d; //Слева единичка 
+            }
+            else if((cur_node->right != NULL) && ((cur_node->right->val.cnst == 1) && (cur_node->right->val.type == LEX_CONST)))
+            {
+                next_node = cur_node->left; 
+                cur_node_d = left_d; //Справа единичка 
+            }
+
+            if(next_node != NULL)
+            {
+                if(cur_node_d == left_d)
+                {
+                    cur_node->left = NULL;
+                }
+                else if(cur_node_d == right_d)
+                {
+                    cur_node->right = NULL;
+                }
+                lex_tree_destroy(cur_node);
+
+                if(prev_node_d == left_d)
+                {
+                    prev_node->left = next_node;
+                    my_task(prev_node, left_d, prev_node->left);
+                }
+                else if(prev_node_d == right_d)
+                {
+                    prev_node->right = next_node;
+                    my_task(prev_node, right_d, prev_node->right);
+                }
+            }
+        }
+    }
+    my_task(cur_node, left_d, cur_node->left);
+    my_task(cur_node, right_d, cur_node->right);    
 }

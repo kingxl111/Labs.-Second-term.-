@@ -21,6 +21,7 @@ lexeme lex_tree_root_val(lex_tree t);
 lex_tree lex_tree_left(lex_tree t);
 lex_tree lex_tree_right(lex_tree t);
 void lex_tree_print(lex_tree t, int level);
+void lex_tree_destroy(lex_tree tree);
 
 // typedef struct
 // {
