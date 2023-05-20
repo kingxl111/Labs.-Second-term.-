@@ -38,8 +38,10 @@ typedef struct
 void mix_elems(Elem arr[], int size);
 void lin_selection_by_counting_sort(Elem *arr, int size);
 void int_lin_selection_by_counting_sort(int arr[], int arr_size);
-lower_bound_result lower_bound(Elem arr[], int size, Key k);
+lower_bound_result lower_bound(Elem arr[], int array_size, Key to_cmp_key, int *array_idx);
 int int_lower_bound(int arr[], int size, int key);
+
+void int_testing();
 
 int main()
 {
@@ -134,11 +136,12 @@ int main()
         
         Key cur_key = {Re_z, Im_z};
 
+        int idx = -1; // Индекс искомого элемента в массиве
         lower_bound_result res;
-        res = lower_bound(ar, ar_size, cur_key);
+        res = lower_bound(ar, ar_size, cur_key, &idx);
         if(res.is_detected)
         {
-            printf("Detected!: Re_z %d, Im_z: %d\n", res.key.Re_z, res.key.Im_z);
+            printf("Detected!: Re_z %d, Im_z: %d, position: %d, value: %s\n", res.key.Re_z, res.key.Im_z, idx, ar[idx].value);
         }
         else
         {
@@ -146,37 +149,6 @@ int main()
         }
 
     }
-
-
-    // int n;
-    // scanf("%d", &n);
-    // int array[n];
-    // for (int i = 0; i < n; i++)
-    // {
-    //     scanf("%d", &array[i]);
-    // }
-    
-    // int_lin_selection_by_counting_sort(array, n);
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     printf("%d ", array[i]);
-    // } printf("\n");
-    
-    // while(true)
-    // {
-    //     int key;
-    //     scanf("%d", &key);
-    //     int result = int_lower_bound(array, n, key);
-    //     if(result != n)
-    //     {
-    //         printf("lower bound result: %d\n", array[result]);
-    //     }
-    //     else
-    //     {
-    //         printf("There's not element by the specified key\n");
-    //     }
-    // }
 
     return 0;
 }
@@ -260,7 +232,7 @@ void lin_selection_by_counting_sort(Elem arr[], int arr_size)
 }
 
 
-lower_bound_result lower_bound(Elem arr[], int size, Key key)
+lower_bound_result lower_bound(Elem arr[], int size, Key key, int *arr_idx)
 {
     int l = 0;
     int r = size - 1;
@@ -292,18 +264,51 @@ lower_bound_result lower_bound(Elem arr[], int size, Key key)
     {
         result.is_detected = true;
         result.key = arr[l].key;
+        *arr_idx = l;
     }
     else if(key_cmp(key, arr[r].key) == 0)
     {
         result.is_detected = true;
         result.key = arr[r].key;
+        *arr_idx = r;
     }
 
 
     return result;
 }
 
+void int_testing()
+{
+    int n;
+    scanf("%d", &n);
+    int array[n];
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &array[i]);
+    }
+    
+    int_lin_selection_by_counting_sort(array, n);
 
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d ", array[i]);
+    } printf("\n");
+    
+    while(true)
+    {
+        int key;
+        scanf("%d", &key);
+        int result = int_lower_bound(array, n, key);
+        if(result != n)
+        {
+            printf("lower bound result: %d\n", array[result]);
+        }
+        else
+        {
+            printf("There's not element by the specified key\n");
+        }
+    }
+}
 void int_lin_selection_by_counting_sort(int arr[], int arr_size)
 {   
     int counting[arr_size];
