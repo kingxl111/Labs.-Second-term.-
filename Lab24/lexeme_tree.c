@@ -87,6 +87,17 @@ void lex_tree_print(lex_tree t, int level)
     lex_tree_print(t->right, level + 1);
 }
 
+void lex_tree_destroy(lex_tree tree)
+{
+    if(tree == NULL)
+    {
+        return;
+    }
+    lex_tree_destroy(tree->left);
+    lex_tree_destroy(tree->right);
+    free(tree);
+}
+
 // static void width_intern(lex_tree t, int_vec *v, int depth)
 // {
 //     if(t==NULL)
