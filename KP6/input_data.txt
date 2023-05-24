@@ -1,2 +1,6 @@
-Mercedes-Benz:E-klass:2015:Automatic:Rear:15:100124:1880000
+Mercedes-Benz:E-class:2015:Automatic:Rear:15:100124:1880000
 BMW:750i:1999:Automatic:Rear:21:215005:1000050
+Audi:RS6:2017:Automatic:25:Alldrive:51000:3550000
+BMW:350:1990:Manual:Rear:21:215005:500050
+Audi:A4:2005:Manual:13:Rear:51000:600000
+Mercedes-Benz:C-class:2000:Automatic:Rear:15:100124:400000
