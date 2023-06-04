@@ -1,6 +1,21 @@
-Mercedes-Benz:E-class:2015:Automatic:Rear:15:100124:1880000
-BMW:750i:1999:Automatic:Rear:21:215005:1000050
-Audi:RS6:2017:Automatic:25:Alldrive:51000:3550000
-BMW:350:1990:Manual:Rear:21:215005:500050
-Audi:A4:2005:Manual:13:Rear:51000:600000
-Mercedes-Benz:C-class:2000:Automatic:Rear:15:100124:400000
+Toyota:Chaser X100:1998:Manual:Rear:18:170000:750000:245
+Mercedes-Benz:E-class W212:2015:Automatic:Rear:15:100124:1880000:275 
+Nissan:Silvia S15:2000:Manual:Rear:24:150000:2500000:270
+Nissan:Laurel C33:1997:Manual:Rear:19:341200:850000:260
+BMW:750i:1999:Automatic:Rear:21:215005:1000050:250
+Ford:Mustang 5-gen:2014:Manual:Rear:25:56000:4000000:270
+Opel:Zafira A:2002:Manual:Forward:10:257000:215000:190
+Lada:Largus:2018:Manual:Forward:11:50500:700000:180
+Nissan:Pathfinder R51:2008:Automatic:Alldrive:13:197000:1100000:180
+Nissan:Laurel C33:2001:Manual:Rear:23:201200:950000:280
+Renault:Logan:2012:Manual:Forward:7:124121:350000:170
+BMW:350:1990:Manual:Rear:21:215005:500050:195
+Nissan:Skyline R34 GTR:2001:Manual:Alldrive:23:150100:3000000:310
+Opel:Astra:2010:Manual:Forward:8:153000:415000:185
+Nissan:GT-R:2021:Automatic:Alldrive:28:34000:4000000:297
+Volkswagen:Arteon:2018:Robot:Forward:8:200000:2500000:220
+Mercedes-Benz:C-class W201:2000:Automatic:Rear:15:100124:400000:185 
+Ferrari:F12 Berlinetta:2013:Automatic:Rear:27:45000:7000000:320
+Audi:A4:2005:Manual:Rear:13:51000:600000:190 
+Audi:RS6:2017:Automatic:Alldrive:25:57000:3550000:285
+Nissan:Cefiro:2003:Automatic:Rear:21:401600:330000:205
