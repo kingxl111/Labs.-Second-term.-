@@ -128,7 +128,11 @@ int main()
         int Re_z, Im_z;
         printf("\n");
         printf("Введите действительную и мнимую часть ключа через пробел: ");
-        scanf("%d%d", &Re_z, &Im_z);
+        if(scanf("%d%d", &Re_z, &Im_z) != 3)
+        {
+            printf("Некорректный ввод!\n");
+            exit(2);
+        }
         
         Key cur_key = {Re_z, Im_z};
 
