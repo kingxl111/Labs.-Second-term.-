@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #define N 9  // Число параметров автомобиля
 
@@ -47,26 +48,26 @@ int main(int argc, char* argv[])
     &current_car.manufact_year, current_car.gear, current_car.drive, &current_car.fuel_cons_per_100km, 
     &current_car.mileage, &current_car.price, &current_car.top_speed) == N)  //[^;] - считывание до того, как встретим ;
     {
-        char *c;
-        int size = sizeof(Car); // количество записываемых байтов
-        // устанавливаем указатель на начало структуры
-        c = (char *)&current_car;
-        // посимвольно записываем в файл структуру
-        for (int i = 0; i < size; i++)
-        {
-            if(putc(*c++, output) == EOF)
-            {
-                printf("Возникла ошибка во время записи файла!\n");
-                return 2;
-            }
-        }
-        /* Плохо работающий вариант(совсем плохо работающий!)
+        // char *c;
+        // int size = sizeof(Car); // количество записываемых байтов
+        // // устанавливаем указатель на начало структуры
+        // c = (char *)&current_car;
+        // // посимвольно записываем в файл структуру
+        // for (int i = 0; i < size; i++)
+        // {
+        //     if(putc(*c++, output) == EOF)
+        //     {
+        //         printf("Возникла ошибка во время записи файла!\n");
+        //         return 2;
+        //     }
+        // }
+        
         if(fwrite(&current_car, sizeof(Car), 1, output) != 1)
         {
             printf("Ошибка при попытке записи в файл\n");
             return 1;
         }
-        */
+        
     }
 
     fclose(input);
@@ -101,7 +102,7 @@ int main(int argc, char* argv[])
     printf("--------------------------------------------------------------------------------------\n");
     // printf("Средняя максимальная скорость(км/ч): %lf, средний пробег(км): %lf\n", average_top_speed, average_mileage);
 
-    printf("Задача: посчитать количество автомобилей, максимальная скорость которых выше (speed),\nпробег ниже (mileage), а год выпуска не более (year)\n");
+    printf("Автомобили расположены в хоронологическом порядке их попадания на авторынок.\nНеобходимо посчитать в множестве каждого третьего автомобиля количество автомобилей, максимальная скорость которых выше (speed),\nпробег ниже (mileage), а год выпуска не более (year).\n");
     int speed, mileage, cmp_m_year; //Год выпуска для сравнения 
     printf("Введите скорость(speed) для сравнения: ");
     scanf("%d", &speed);
@@ -111,58 +112,59 @@ int main(int argc, char* argv[])
     scanf("%d", &cmp_m_year);
     printf("--------------------------------------------------------------------------------------\n");
 
-    int fs_pos = 0;
-    int first_jump = sizeof(current_car.brand) + sizeof(current_car.model);
-    int second_jump = sizeof(current_car.gear) + sizeof(current_car.drive) + sizeof(current_car.fuel_cons_per_100km);
-    int third_jump = sizeof(current_car.price);
+    // int fs_pos = 0;
+    // int first_jump = sizeof(current_car.brand) + sizeof(current_car.model);
+    // int second_jump = sizeof(current_car.gear) + sizeof(current_car.drive) + sizeof(current_car.fuel_cons_per_100km);
+    // int third_jump = sizeof(current_car.price);
+
+    // offsetof(Car, current_car.manufact_year);
+    // #define offsetof(t, f) &(((t*)0)->f)
     
     input = fopen(argv[2], "rb");
     if(argc == 3 + 1)
     {
         output = fopen(argv[3], "w");
     }
-    fseek(input, fs_pos, SEEK_SET);
-
+    fseek(input, 0, SEEK_SET);
     int counter = 0;
 
-    while(fs_pos < cnt * sizeof(Car))
+    while(fread(&current_car, sizeof(Car), 1, input) == 1)
     {
         counter++;
 
-        int cur_year;
-        fseek(input, first_jump, SEEK_CUR);
-        fread(&cur_year, sizeof(int), 1, input);
-        // printf("jump size: %d, cur_year: %d\n", first_jump, cur_year);
+        // int cur_year;
+        // fseek(input, first_jump, SEEK_CUR);
+        // fread(&cur_year, sizeof(int), 1, input);
+        // // printf("jump size: %d, cur_year: %d\n", first_jump, cur_year);
 
-        int cur_mileage;
-        fseek(input, second_jump, SEEK_CUR);
-        fread(&cur_mileage, sizeof(int), 1, input);
+        // int cur_mileage;
+        // fseek(input, second_jump, SEEK_CUR);
+        // fread(&cur_mileage, sizeof(int), 1, input);
 
-        int cur_top_speed;
-        fseek(input, third_jump, SEEK_CUR);
-        fread(&cur_top_speed, sizeof(int), 1, input);
+        // int cur_top_speed;
+        // fseek(input, third_jump, SEEK_CUR);
+        // fread(&cur_top_speed, sizeof(int), 1, input);
 
-        if((cur_top_speed > speed) && (cur_mileage < mileage) && (cur_year <= cmp_m_year))
+        if((current_car.top_speed > speed) && (current_car.mileage < mileage) && (current_car.manufact_year <= cmp_m_year))
         {
             ans++;
-            fseek(input, fs_pos, SEEK_SET);
-            fread(&current_car, sizeof(Car), 1, input);
+            FILE* stream;
             if(argc == 3 + 1)
             {
-                fprintf(output, "%s:%s:%d:%s:%s:%d:%d:%d:%d\n", current_car.brand, current_car.model, 
-                current_car.manufact_year, current_car.gear, current_car.drive, current_car.fuel_cons_per_100km, 
-                current_car.mileage, current_car.price, current_car.top_speed);
+                stream = output;
             }
             else 
             {
-                fprintf(stdout, "%s:%s:%d:%s:%s:%d:%d:%d:%d\n", current_car.brand, current_car.model, 
+                stream = stdout;
+            }
+            fprintf(stream, "%s:%s:%d:%s:%s:%d:%d:%d:%d\n", current_car.brand, current_car.model, 
                 current_car.manufact_year, current_car.gear, current_car.drive, current_car.fuel_cons_per_100km, 
                 current_car.mileage, current_car.price, current_car.top_speed);
-                // printf("Номер автомобиля в таблице: %d\n", counter);
-            }
+            
         }
+        fseek(input, sizeof(Car) * 3, SEEK_CUR);
         // printf("cur year: %d, cur mileage: %d, cur top speed: %d\n", cur_year, cur_mileage, cur_top_speed);
-        fs_pos = fs_pos + first_jump + second_jump + third_jump + 3 * sizeof(int);
+        // fs_pos = fs_pos + first_jump + second_jump + third_jump + 3 * sizeof(int);
     }
     fclose(input);
     if(argc == 3 + 1)
