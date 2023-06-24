@@ -1,0 +1,6 @@
+file4.txt file4.txt
+64 bytes from autoru-front.http.yandex.net (213.180.204.188): icmp_seq=104 ttl=244 time=43.4 ms
+file4.txt
+-
+-
+/

@@ -229,7 +229,7 @@ void dbl_v_show_vector(dbl_vec *v)
 {
     for(int i=(v->head);i<(v->head + v->size);++i)
     {
-        printf("%lf ", v->buff[i%(v->cap)]);
+        printf("%.1lf ", v->buff[i%(v->cap)]);
     } printf("\n");
 }
 

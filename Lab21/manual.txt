@@ -1,0 +1,56 @@
+********************************************************************************
+
+*     * ****** ****    ***   ******
+**   ** *      *   * *       *
+* * * * ****** ****  *       ******
+*  *  * *      * *   *   *** *
+*     * ****** *   *   ***   ******
+
+********************************************************************************
+merge_script is a program for combining files
+that have a smaller size compared to the source file, as well
+as a specific suffix that can be obtained as a parameter
+when running the script, or specified in the configuration file. The same applies
+to the source file.
+
+By default, the program compares the size of the file
+that follows the keys directly, or, if there are no keys, the size of the very first file.
+
+The suffix is followed by the input file being compared.
+In the case when the parameters are read from the configuration file,
+the keys are followed by a non-empty sequence of files that need to be combined into one.
+The configuration file contains the suffix and the absolute path to the file to
+be compared.
+
+As parameters , it can take:
+1) The path to the file being compared
+
+2) Files to be merged
+
+3) The key -o, which allows you to write the result of the script to a file.
+By default, the result is output to the standard output stream, to the console.
+
+4) The help key, which outputs information about the use of the script to the standard output stream
+
+5) The key is l, which at the end of the concatenation outputs the number of lines in the final file
+
+6) The key is c, which symbolizes that the program will read the parameters from the configuration file
+
+Command format:
+
+cmd --help
+
+cmd -l -s "suffix" compare_file file1 ... file?* -o new file name
+
+cmd -l -c file1 ... file?* -o new file_name
+
+cmd --help
+
+
+
+
+
+
+
+
+

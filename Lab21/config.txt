@@ -1,0 +1,2 @@
+suff=".txt"
+pth_to_file="/home/vadim/2 семестр/REPOS_labs/labs_second_term/LaB21/my_l21Files/input.txt"

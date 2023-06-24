@@ -1,0 +1,69 @@
+#include <stdio.h>
+
+void build_pref_function(char *s, int *p, int n)
+{
+	p[0] = 0;
+	int j = 0;
+	for(int i = 1; i < n; ++i)
+	{	
+		j = p[i-1];
+		if(s[i] == s[j])
+		{
+			p[i] = p[i-1] + 1;
+			continue;
+		}
+		while(j > 0 && s[j] != s[i])
+		{
+			j = p[j-1];
+		}
+		if(s[j] == s[i])
+		{
+			p[i] = j + 1;
+		}
+		else
+		{
+			p[i] = 0;
+		}
+	}
+}
+
+
+int KMP(char *t, char *s)
+{
+	int m = strlen(s);
+	int n = strlen(t);
+	int p[m];
+	build_pref_function(s, p, m);
+	int j = 0;
+	for(int i = 0; i < n; ++i)
+	{
+		while(j > 0 && t[i] != s[j])
+		{
+			j = p[j-1];
+		}
+		if(t[i] == s[j])
+		{
+			j++;
+		}
+		else 
+		{
+			j = 0;
+		}
+		if(j == m)
+		{
+			return i - m;
+		}
+	}
+	return -1;
+}
+
+int main()
+{
+
+
+
+    return 0;
+}
+
+
+

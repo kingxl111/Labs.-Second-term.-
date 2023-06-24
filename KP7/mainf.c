@@ -69,7 +69,7 @@ void show_matrix(matrix *mt)
         {
             for(int j=0;j<mt->m;++j)
             {
-                printf("%lf ", 0.0);
+                printf("%.1lf ", 0.0);
             } 
         }
         else
@@ -80,12 +80,12 @@ void show_matrix(matrix *mt)
                 
                 if(dbl_v_get_at(&(mt->A), idx) == k)
                 {
-                    printf("%lf", dbl_v_get_at(&(mt->A), idx + 1)); 
+                    printf("%.1lf ", dbl_v_get_at(&(mt->A), idx + 1)); 
                     idx+=2;
                 }
                 else
                 {
-                    printf("%lf ", 0.0);
+                    printf("%.1lf ", 0.0);
                 }
                 ++k;
             }
@@ -128,7 +128,7 @@ int main()
         while((str_idx < A_size) && dbl_v_get_at(&mtx.A, str_idx)!=(-1))
         {
             cur_sum += dbl_v_get_at(&mtx.A, str_idx + 1); //Получаем значение в i-той строке
-            str_idx+=2;                                   //под индексом, следующим за str_idx
+            str_idx += 2;                                   //под индексом, следующим за str_idx
             cur_n++;
         }
         if(cur_n > max_n)
@@ -146,7 +146,7 @@ int main()
         cur_n = int_v_get_at(&raws_n, i);
         if(cur_n == max_n)
         {
-            printf("Raw index: %d\nSum of the raw elements: %lf\n", i, dbl_v_get_at(&raws_sums, i));
+            printf("Raw index: %d\nSum of the raw elements: %.1lf\n", i, dbl_v_get_at(&raws_sums, i));
         }
     }
     show_matrix(&mtx);
